@@ -1,0 +1,43 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Mini Blog Dashboard</a>
+          <div class="navbar-nav ms-auto">
+            <span class="navbar-text me-3">
+              Welcome, <%= @user.email %>
+            </span>
+            <%= link_to "Edit Profile", edit_user_registration_path, class: "btn btn-outline-primary me-2" %>
+            <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-outline-danger" %>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">User Information</h5>
+          <p class="card-text">
+            <strong>Email:</strong> <%= @user.email %><br>
+            <strong>Member since:</strong> <%= @user.created_at.strftime("%B %d, %Y") %><br>
+            <strong>Last sign in:</strong> <%= @user.last_sign_in_at ? @user.last_sign_in_at.strftime("%B %d, %Y at %I:%M %p") : "Never" %>
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Dashboard</h5>
+          <p class="card-text">Welcome to your dashboard! This is where you'll manage your blog posts and settings.</p>
+          <p class="text-muted">More features coming soon...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
