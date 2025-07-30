@@ -24,6 +24,19 @@ gem "active_model_serializers", "~> 0.10.0"
 
 # Pagination
 gem "kaminari", "~> 1.2"
+
+# Admin panel
+gem "rails_admin", "~> 3.0"
+
+# Authorization
+gem "pundit", "~> 2.3"
+
+# Charts and analytics
+gem "chartkick", "~> 5.0"
+gem "groupdate", "~> 6.0"
+
+# Data export
+gem "csv", require: false
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]

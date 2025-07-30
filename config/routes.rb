@@ -5,6 +5,9 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  # Rails Admin (admin only)
+  mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
+
   # Devise routes for user authentication
   devise_for :users
 
@@ -17,6 +20,8 @@ Rails.application.routes.draw do
   # Admin namespace
   namespace :admin do
     get 'dashboard', to: 'dashboard#index', as: :dashboard
+    get 'analytics', to: 'analytics#index', as: :analytics
+    get 'analytics/export', to: 'analytics#export', as: :analytics_export
     resources :users, only: [:index, :show, :update, :destroy] do
       member do
         patch :toggle_admin

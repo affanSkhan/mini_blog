@@ -1,0 +1,308 @@
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-chart-line"></i> Analytics Dashboard</h1>
+        <div class="btn-group">
+          <%= link_to "Rails Admin", rails_admin_path, class: "btn btn-primary", target: "_blank" %>
+          <%= link_to "Sidekiq", "/sidekiq", class: "btn btn-warning", target: "_blank" %>
+        </div>
+      </div>
+
+      <!-- Date Range Filter -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <%= form_with url: admin_analytics_path, method: :get, local: true, class: "row g-3" do |form| %>
+            <div class="col-md-3">
+              <label class="form-label">Start Date</label>
+              <%= form.date_field :start_date, value: @start_date, class: "form-control" %>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">End Date</label>
+              <%= form.date_field :end_date, value: @end_date, class: "form-control" %>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+              <%= form.submit "Update Analytics", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Statistics Cards -->
+      <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 class="card-title"><%= @total_users %></h4>
+                  <p class="card-text">Total Users</p>
+                  <small>+<%= @new_users_this_month %> this period</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-users fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 class="card-title"><%= @total_posts %></h4>
+                  <p class="card-text">Total Posts</p>
+                  <small><%= @published_posts %> published, <%= @draft_posts %> drafts</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-file-alt fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 class="card-title"><%= @total_comments %></h4>
+                  <p class="card-text">Total Comments</p>
+                  <small>+<%= @comments_this_month %> this period</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-comments fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 class="card-title"><%= @admin_users %></h4>
+                  <p class="card-text">Admin Users</p>
+                  <small>Administrators</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-shield-alt fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0"><i class="fas fa-chart-bar"></i> User Signups Over Time</h5>
+            </div>
+            <div class="card-body">
+              <%= line_chart User.group_by_day(:created_at, last: 30).count, 
+                  colors: ["#007bff"],
+                  library: { scales: { y: { beginAtZero: true } } } %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0"><i class="fas fa-chart-line"></i> Posts Published Over Time</h5>
+            </div>
+            <div class="card-body">
+              <%= line_chart Post.published.group_by_day(:created_at, last: 30).count,
+                  colors: ["#28a745"],
+                  library: { scales: { y: { beginAtZero: true } } } %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Lists Row -->
+      <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0"><i class="fas fa-trophy"></i> Top Authors</h5>
+            </div>
+            <div class="card-body">
+              <% if @top_authors.any? %>
+                <div class="list-group list-group-flush">
+                  <% @top_authors.each_with_index do |(email, count), index| %>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <span class="badge bg-primary me-2">#<%= index + 1 %></span>
+                        <%= email %>
+                      </div>
+                      <span class="badge bg-success rounded-pill"><%= count %> posts</span>
+                    </div>
+                  <% end %>
+                </div>
+              <% else %>
+                <p class="text-muted">No posts yet.</p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0"><i class="fas fa-fire"></i> Most Commented Posts</h5>
+            </div>
+            <div class="card-body">
+              <% if @most_commented_posts.any? %>
+                <div class="list-group list-group-flush">
+                  <% @most_commented_posts.each_with_index do |(title, count), index| %>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <span class="badge bg-warning me-2">#<%= index + 1 %></span>
+                        <%= truncate(title, length: 40) %>
+                      </div>
+                      <span class="badge bg-info rounded-pill"><%= count %> comments</span>
+                    </div>
+                  <% end %>
+                </div>
+              <% else %>
+                <p class="text-muted">No comments yet.</p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Export Section -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0"><i class="fas fa-download"></i> Export Data</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <%= link_to "Export Users (CSV)", admin_analytics_export_path(type: 'users', format: 'csv'), 
+                      class: "btn btn-outline-primary w-100" %>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <%= link_to "Export Posts (CSV)", admin_analytics_export_path(type: 'posts', format: 'csv'), 
+                      class: "btn btn-outline-success w-100" %>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <%= link_to "Export Comments (CSV)", admin_analytics_export_path(type: 'comments', format: 'csv'), 
+                      class: "btn btn-outline-info w-100" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0"><i class="fas fa-user-plus"></i> Recent Users</h5>
+            </div>
+            <div class="card-body">
+              <% if @recent_users.any? %>
+                <div class="list-group list-group-flush">
+                  <% @recent_users.each do |user| %>
+                    <div class="list-group-item">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                          <strong><%= user.email %></strong>
+                          <% if user.admin? %>
+                            <span class="badge bg-danger ms-1">Admin</span>
+                          <% end %>
+                        </div>
+                        <small class="text-muted"><%= time_ago_in_words(user.created_at) %> ago</small>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              <% else %>
+                <p class="text-muted">No users yet.</p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0"><i class="fas fa-file-alt"></i> Recent Posts</h5>
+            </div>
+            <div class="card-body">
+              <% if @recent_posts.any? %>
+                <div class="list-group list-group-flush">
+                  <% @recent_posts.each do |post| %>
+                    <div class="list-group-item">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                          <strong><%= truncate(post.title, length: 30) %></strong>
+                          <br>
+                          <small class="text-muted">by <%= post.user.email %></small>
+                        </div>
+                        <div class="text-end">
+                          <span class="badge bg-<%= post.published? ? 'success' : 'warning' %>">
+                            <%= post.status %>
+                          </span>
+                          <br>
+                          <small class="text-muted"><%= time_ago_in_words(post.created_at) %> ago</small>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              <% else %>
+                <p class="text-muted">No posts yet.</p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0"><i class="fas fa-comment"></i> Recent Comments</h5>
+            </div>
+            <div class="card-body">
+              <% if @recent_comments.any? %>
+                <div class="list-group list-group-flush">
+                  <% @recent_comments.each do |comment| %>
+                    <div class="list-group-item">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                          <strong><%= truncate(comment.body, length: 30) %></strong>
+                          <br>
+                          <small class="text-muted">by <%= comment.user.email %></small>
+                          <br>
+                          <small class="text-muted">on <%= truncate(comment.post.title, length: 25) %></small>
+                        </div>
+                        <small class="text-muted"><%= time_ago_in_words(comment.created_at) %> ago</small>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              <% else %>
+                <p class="text-muted">No comments yet.</p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

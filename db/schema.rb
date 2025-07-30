@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_30_054029) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_30_060000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -34,6 +34,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_30_054029) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "comments_count", default: 0, null: false
+    t.index ["comments_count"], name: "index_posts_on_comments_count"
+    t.index ["created_at"], name: "index_posts_on_created_at"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
     t.index ["status"], name: "index_posts_on_status"
     t.index ["user_id", "title"], name: "index_posts_on_user_id_and_title", unique: true
@@ -50,7 +53,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_30_054029) do
     t.datetime "updated_at", null: false
     t.boolean "admin", default: false, null: false
     t.datetime "deleted_at"
+    t.integer "posts_count", default: 0, null: false
+    t.integer "comments_count", default: 0, null: false
+    t.index ["comments_count"], name: "index_users_on_comments_count"
+    t.index ["created_at"], name: "index_users_on_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["posts_count"], name: "index_users_on_posts_count"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 

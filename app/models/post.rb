@@ -5,7 +5,7 @@ class Post < ApplicationRecord
 
   # Associations
   belongs_to :user
-  has_many :comments, dependent: :destroy
+  has_many :comments, dependent: :destroy, counter_cache: true
 
   # Enums for status
   enum :status, { draft: 0, published: 1 }
