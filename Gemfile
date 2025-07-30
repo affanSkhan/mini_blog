@@ -6,6 +6,15 @@ gem "rails", "~> 8.0.2"
 gem "propshaft"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
+
+# Background job processing
+gem "sidekiq", "~> 7.0"
+
+# Redis for Sidekiq
+gem "redis", "~> 5.0"
+
+# Email preview in development
+gem "letter_opener", group: :development
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -25,6 +34,9 @@ gem "devise"
 
 # Use a compatible version of psych for Windows
 gem "psych", "~> 4.0"
+
+# Friendly URLs for Rails [https://github.com/norman/friendly_id]
+gem "friendly_id", "~> 5.4.0"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]

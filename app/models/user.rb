@@ -3,4 +3,37 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  # Associations
+  has_many :posts, dependent: :destroy
+  has_many :comments, dependent: :destroy
+
+  # Validations
+  validates :email, presence: true, uniqueness: true
+
+  # Soft delete
+  default_scope { where(deleted_at: nil) }
+
+  def deleted?
+    deleted_at.present?
+  end
+
+  # Role check
+  def admin?
+    self.admin
+  end
+
+  # Callbacks for email notifications
+  after_create_commit :send_welcome_email
+  after_create_commit :notify_admins
+
+  private
+
+  def send_welcome_email
+    WelcomeEmailJob.perform_later(id)
+  end
+
+  def notify_admins
+    AdminNotificationJob.perform_later(id)
+  end
 end

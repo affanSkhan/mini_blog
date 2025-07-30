@@ -1,0 +1,24 @@
+# Sidekiq configuration file
+# https://github.com/mperham/sidekiq/wiki/Configuration
+
+:concurrency: 5
+:queues:
+  - [default, 1]
+  - [mailers, 2]
+  - [critical, 3]
+
+# Redis configuration
+:redis:
+  :url: <%= ENV.fetch("REDIS_URL", "redis://localhost:6379/0") %>
+  :namespace: mini_blog
+
+# Logging
+:logfile: ./log/sidekiq.log
+:verbose: false
+
+# Process monitoring
+:pidfile: ./tmp/pids/sidekiq.pid
+
+# Error handling
+:max_retries: 3
+:retry_interval: 60 

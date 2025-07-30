@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  # Sidekiq Web UI (admin only)
+  require 'sidekiq/web'
+  authenticate :user, lambda { |u| u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   # Devise routes for user authentication
   devise_for :users
 
@@ -7,6 +13,23 @@ Rails.application.routes.draw do
 
   # Dashboard route - requires authentication
   get "dashboard", to: "dashboard#index", as: :dashboard
+
+  # Admin namespace
+  namespace :admin do
+    get 'dashboard', to: 'dashboard#index', as: :dashboard
+    resources :users, only: [:index, :show, :update, :destroy] do
+      member do
+        patch :toggle_admin
+        patch :soft_delete
+      end
+      resources :posts, only: [:index]
+    end
+  end
+
+  # Posts routes with friendly_id support and nested comments
+  resources :posts, param: :slug do
+    resources :comments, only: [:create, :destroy]
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -2,9 +2,50 @@
 
 A simple and elegant blogging platform built with Ruby on Rails 7, PostgreSQL, and Devise for authentication.
 
-## 🚀 Phase 1: Authentication Implementation
+## 🚀 Phase 1: Authentication Implementation ✅
 
 This project implements a complete authentication system using Devise with the following features:
+
+## 📝 Phase 2: Posts System ✅
+
+This project implements a complete blog posts system with the following features:
+
+### ✅ Implemented Features
+
+1. **Post Model with Full CRUD Operations**
+   - Post creation, editing, updating, and deletion
+   - Draft and published status management
+   - Friendly URLs using slugs
+   - User ownership and access control
+
+2. **Advanced Access Control**
+   - Guests can only view published posts
+   - Logged-in users can view all their own posts (including drafts)
+   - Users can only edit/delete their own posts
+   - Proper authentication and authorization
+
+3. **Modern UI with Bootstrap 5**
+   - Responsive post listing with cards
+   - Professional post forms with validation
+   - Status badges (draft/published)
+   - Clean post display with proper formatting
+
+4. **Enhanced Dashboard Integration**
+   - User dashboard shows recent posts
+   - Quick access to create new posts
+   - Post status indicators
+   - Navigation to all posts
+
+### ✅ Post System Features
+
+- **Friendly URLs:** Posts use slugs instead of IDs (e.g., `/posts/my-awesome-post`)
+- **Status Management:** Draft and published states with proper visibility
+- **Rich Content:** Support for markdown-style formatting
+- **User Ownership:** Complete user-post association with proper permissions
+- **Validation:** Comprehensive form validation with user-friendly error messages
+- **Performance:** Database indexes for optimal query performance
+
+## 🚀 Phase 1: Authentication Implementation
 
 ### ✅ Implemented Features
 
@@ -82,15 +123,17 @@ sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';"
 
 ## 📁 Files Changed/Created
 
-### Controllers
+### Phase 1: Authentication
+
+#### Controllers
 - `app/controllers/application_controller.rb` - Added authentication helpers and redirection logic
 - `app/controllers/home_controller.rb` - Homepage controller (allows unauthenticated access)
 - `app/controllers/dashboard_controller.rb` - Protected dashboard controller
 
-### Models
+#### Models
 - `app/models/user.rb` - Devise User model with authentication features
 
-### Views
+#### Views
 - `app/views/layouts/application.html.erb` - Added Bootstrap 5 and flash messages
 - `app/views/home/index.html.erb` - Beautiful homepage with sign up/sign in cards
 - `app/views/dashboard/index.html.erb` - User dashboard with profile information
@@ -100,13 +143,42 @@ sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';"
 - `app/views/devise/shared/_links.html.erb` - Styled navigation links
 - `app/views/devise/shared/_error_messages.html.erb` - Styled error messages
 
-### Configuration
+#### Configuration
 - `config/routes.rb` - Updated with Devise routes and custom routes
 - `config/database.yml` - PostgreSQL configuration
 - `Gemfile` - Added Devise gem and Bootstrap 5 CDN
 
-### Database
+#### Database
 - `db/migrate/*_devise_create_users.rb` - Users table migration
+
+### Phase 2: Posts System
+
+#### Models
+- `app/models/post.rb` - Post model with validations, associations, and friendly_id
+- `app/models/user.rb` - Updated with posts association
+
+#### Controllers
+- `app/controllers/posts_controller.rb` - Full CRUD operations with access control
+
+#### Views
+- `app/views/posts/index.html.erb` - Post listing with cards and status badges
+- `app/views/posts/show.html.erb` - Individual post display with action buttons
+- `app/views/posts/new.html.erb` - New post form wrapper
+- `app/views/posts/edit.html.erb` - Edit post form wrapper
+- `app/views/posts/_form.html.erb` - Shared form partial with validation
+- `app/views/dashboard/index.html.erb` - Updated with user's posts display
+- `app/views/home/index.html.erb` - Updated with posts link
+
+#### Configuration
+- `config/routes.rb` - Added posts resources with friendly_id support
+- `Gemfile` - Added friendly_id gem for slug generation
+
+#### Database
+- `db/migrate/*_create_posts.rb` - Posts table with indexes and constraints
+- `db/seeds.rb` - Sample data for testing
+
+#### Tests
+- `test/models/post_test.rb` - Comprehensive model tests
 
 ## 🔐 Authentication Flow
 
@@ -125,6 +197,31 @@ sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';"
    - Dashboard requires authentication
    - Unauthenticated users are redirected to sign in page
 
+## 📝 Posts System Flow
+
+1. **Public Access:**
+   - Anyone can view published posts (`/posts`)
+   - Individual published posts are publicly accessible
+   - Post listing shows only published content
+
+2. **Authenticated Users:**
+   - Can create new posts (`/posts/new`)
+   - Can edit their own posts (`/posts/:slug/edit`)
+   - Can delete their own posts
+   - Can view their own draft posts
+   - Dashboard shows their recent posts
+
+3. **Access Control:**
+   - Users can only edit/delete their own posts
+   - Draft posts are only visible to the author
+   - Published posts are visible to everyone
+   - Proper error handling for unauthorized access
+
+4. **URL Structure:**
+   - Posts use friendly URLs with slugs (e.g., `/posts/my-awesome-post`)
+   - Automatic slug generation from post titles
+   - SEO-friendly URLs for better discoverability
+
 ## 🎨 UI Features
 
 - **Bootstrap 5 Integration:** Modern, responsive design
@@ -136,11 +233,28 @@ sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';"
 
 ## 🚀 Next Steps (Future Phases)
 
-- Phase 2: Blog Post Management (CRUD operations)
-- Phase 3: User Profiles and Avatars
-- Phase 4: Comments and Interactions
+- ✅ Phase 1: Authentication System (Complete)
+- ✅ Phase 2: Posts System (Complete)
+- Phase 3: Comments System
+  - Comment model with user associations
+  - Nested comments (replies)
+  - Comment moderation features
+  - Real-time comment updates
+- Phase 4: User Profiles and Avatars
+  - User profile pages
+  - Avatar upload functionality
+  - Bio and social links
+  - User post archives
 - Phase 5: Search and Filtering
+  - Full-text search functionality
+  - Category/tag system
+  - Advanced filtering options
+  - Search result highlighting
 - Phase 6: Admin Panel
+  - Admin user management
+  - Content moderation tools
+  - Analytics dashboard
+  - System configuration
 
 ## 🐛 Troubleshooting
 

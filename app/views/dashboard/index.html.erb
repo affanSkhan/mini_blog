@@ -24,18 +24,94 @@
           <p class="card-text">
             <strong>Email:</strong> <%= @user.email %><br>
             <strong>Member since:</strong> <%= @user.created_at.strftime("%B %d, %Y") %><br>
-            <strong>Last sign in:</strong> <%= @user.last_sign_in_at ? @user.last_sign_in_at.strftime("%B %d, %Y at %I:%M %p") : "Never" %>
+            <strong>Last sign in:</strong> <%= @user.respond_to?(:last_sign_in_at) && @user.last_sign_in_at ? @user.last_sign_in_at.strftime("%B %d, %Y at %I:%M %p") : "Never" %>
           </p>
+          
+          <% if @user.admin? %>
+            <div class="mt-3">
+              <%= link_to admin_dashboard_path, class: "btn btn-danger" do %>
+                <i class="fas fa-tachometer-alt"></i> Admin Dashboard
+              <% end %>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
     
     <div class="col-md-8">
+      <!-- Dashboard Filters -->
+      <%= render 'shared/dashboard_filters' %>
+      
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Dashboard</h5>
-          <p class="card-text">Welcome to your dashboard! This is where you'll manage your blog posts and settings.</p>
-          <p class="text-muted">More features coming soon...</p>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title mb-0">
+              Your Posts
+              <% if @posts.any? %>
+                <span class="badge bg-secondary ms-2"><%= @posts.count %></span>
+              <% end %>
+            </h5>
+            <%= link_to new_post_path, class: "btn btn-primary btn-sm" do %>
+              <i class="fas fa-plus"></i> New Post
+            <% end %>
+          </div>
+          
+          <!-- Results Summary -->
+          <% if @filter_params&.values&.any?(&:present?) %>
+            <div class="alert alert-info mb-3">
+              <i class="fas fa-info-circle"></i>
+              Showing <%= @posts.count %> post<%= 's' unless @posts.count == 1 %> 
+              <% if @filter_params[:search].present? %>
+                matching "<%= @filter_params[:search] %>"
+              <% end %>
+            </div>
+          <% end %>
+          
+          <% if @posts.any? %>
+            <div class="list-group list-group-flush">
+              <% @posts.limit(10).each do |post| %>
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                  <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <%= link_to post.title, post_path(post), class: "text-decoration-none fw-bold" %>
+                        <br>
+                        <small class="text-muted">
+                          <i class="fas fa-clock"></i> <%= time_ago_in_words(post.created_at) %> ago
+                        </small>
+                      </div>
+                      <div class="text-end">
+                        <span class="badge <%= post.published? ? 'bg-success' : 'bg-warning' %> me-2">
+                          <%= post.status.titleize %>
+                        </span>
+                        <span class="badge bg-info">
+                          <i class="fas fa-comments"></i> <%= post.comments.count %>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            
+            <% if @posts.count > 10 %>
+              <div class="mt-3">
+                <%= link_to "View All Your Posts", posts_path(user_filter: "own"), class: "btn btn-outline-primary btn-sm" %>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="text-center py-4">
+              <i class="fas fa-search fa-3x text-muted mb-3"></i>
+              <h5 class="text-muted">No posts found</h5>
+              <p class="text-muted">
+                <% if @filter_params&.values&.any?(&:present?) %>
+                  Try adjusting your search criteria or filters.
+                <% else %>
+                  You haven't created any posts yet. Start writing by creating your first post!
+                <% end %>
+              </p>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>

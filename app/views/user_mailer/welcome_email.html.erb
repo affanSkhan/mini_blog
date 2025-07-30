@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome to Mini Blog</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+    .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px; }
+    .btn { display: inline-block; padding: 12px 24px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 10px 0; }
+    .btn:hover { background: #0056b3; }
+    .footer { text-align: center; margin-top: 20px; color: #666; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎉 Welcome to Mini Blog!</h1>
+      <p>Your journey as a blogger starts now</p>
+    </div>
+    
+    <div class="content">
+      <h2>Hello <%= @user.email %>,</h2>
+      
+      <p>Welcome to Mini Blog! We're excited to have you join our community of writers and readers.</p>
+      
+      <h3>What you can do now:</h3>
+      <ul>
+        <li>📝 Create your first blog post</li>
+        <li>💬 Comment on other posts</li>
+        <li>🔍 Discover amazing content</li>
+        <li>👥 Connect with other writers</li>
+      </ul>
+      
+      <p>Ready to get started? Click the button below to sign in and create your first post!</p>
+      
+      <div style="text-align: center;">
+        <a href="<%= @login_url %>" class="btn">Sign In & Start Writing</a>
+      </div>
+      
+      <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
+      
+      <h3>Getting Started Tips:</h3>
+      <ol>
+        <li><strong>Write your first post:</strong> Share your thoughts, ideas, or stories</li>
+        <li><strong>Engage with the community:</strong> Read and comment on other posts</li>
+        <li><strong>Build your audience:</strong> Publish regularly and interact with readers</li>
+      </ol>
+      
+      <p>If you have any questions or need help getting started, feel free to reach out to our support team.</p>
+      
+      <p>Happy blogging!<br>
+      The Mini Blog Team</p>
+    </div>
+    
+    <div class="footer">
+      <p>This email was sent to <%= @user.email %> because you signed up for Mini Blog.</p>
+      <p>If you didn't create this account, please ignore this email.</p>
+    </div>
+  </div>
+</body>
+</html> 

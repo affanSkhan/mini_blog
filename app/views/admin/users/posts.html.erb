@@ -1,0 +1,104 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+          <i class="fas fa-file-alt"></i> Posts by <%= @user.email %>
+        </h1>
+        <div>
+          <%= link_to admin_user_path(@user), class: "btn btn-outline-secondary me-2" do %>
+            <i class="fas fa-arrow-left"></i> Back to User
+          <% end %>
+          <%= link_to admin_users_path, class: "btn btn-outline-primary" do %>
+            <i class="fas fa-users"></i> All Users
+          <% end %>
+        </div>
+      </div>
+
+      <!-- User Summary -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3 text-center">
+              <h4 class="text-primary"><%= @posts.count %></h4>
+              <p class="text-muted">Total Posts</p>
+            </div>
+            <div class="col-md-3 text-center">
+              <h4 class="text-success"><%= @posts.published.count %></h4>
+              <p class="text-muted">Published</p>
+            </div>
+            <div class="col-md-3 text-center">
+              <h4 class="text-warning"><%= @posts.draft.count %></h4>
+              <p class="text-muted">Drafts</p>
+            </div>
+            <div class="col-md-3 text-center">
+              <h4 class="text-info"><%= @user.comments.count %></h4>
+              <p class="text-muted">Comments Made</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <% if @posts.any? %>
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">All Posts (<%= @posts.count %>)</h5>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                    <th>Comments</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @posts.each do |post| %>
+                    <tr>
+                      <td>
+                        <strong><%= link_to post.title, post_path(post), class: "text-decoration-none" %></strong>
+                        <br>
+                        <small class="text-muted">
+                          <%= truncate(post.body, length: 100) %>
+                        </small>
+                      </td>
+                      <td>
+                        <% if post.published? %>
+                          <span class="badge bg-success">Published</span>
+                        <% else %>
+                          <span class="badge bg-warning">Draft</span>
+                        <% end %>
+                      </td>
+                      <td><%= post.created_at.strftime("%B %d, %Y") %></td>
+                      <td><%= post.updated_at.strftime("%B %d, %Y") %></td>
+                      <td>
+                        <span class="badge bg-info"><%= post.comments.count %></span>
+                      </td>
+                      <td>
+                        <div class="btn-group" role="group">
+                          <%= link_to "View", post_path(post), class: "btn btn-sm btn-outline-info" %>
+                          <% if post.user == current_user %>
+                            <%= link_to "Edit", edit_post_path(post), class: "btn btn-sm btn-outline-warning" %>
+                          <% end %>
+                        </div>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle"></i> This user hasn't created any posts yet.
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div> 

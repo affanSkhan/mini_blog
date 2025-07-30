@@ -1,0 +1,133 @@
+<div class="card mb-4">
+  <div class="card-header">
+    <h5 class="mb-0">
+      <i class="fas fa-filter"></i> Search & Filters
+    </h5>
+  </div>
+  <div class="card-body">
+    <%= form_with url: posts_path, method: :get, local: true, class: "row g-3" do |form| %>
+      <!-- Search Bar -->
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="fas fa-search"></i>
+          </span>
+          <%= form.text_field :search, 
+              value: @filter_params&.dig(:search), 
+              class: "form-control", 
+              placeholder: "Search posts by title or content..." %>
+        </div>
+      </div>
+
+      <!-- Status Filter -->
+      <div class="col-md-3">
+        <%= form.select :status, 
+            options_for_select([
+              ["All Posts", "all"],
+              ["Published Only", "published"],
+              ["Drafts Only", "draft"]
+            ], @filter_params&.dig(:status)), 
+            {}, 
+            { class: "form-select" } %>
+      </div>
+
+      <!-- Sort Options -->
+      <div class="col-md-3">
+        <%= form.select :sort, 
+            options_for_select([
+              ["Newest First", "newest"],
+              ["Oldest First", "oldest"],
+              ["Most Commented", "most_commented"],
+              ["Title A-Z", "title_asc"],
+              ["Title Z-A", "title_desc"]
+            ], @filter_params&.dig(:sort) || "newest"), 
+            {}, 
+            { class: "form-select" } %>
+      </div>
+
+      <!-- User Filter (only for logged-in users) -->
+      <% if user_signed_in? %>
+        <div class="col-md-4">
+          <%= form.select :user_filter, 
+              options_for_select([
+                ["All Users", "all"],
+                ["My Posts Only", "own"],
+                ["Others' Posts", "others"]
+              ], @filter_params&.dig(:user_filter) || "all"), 
+              {}, 
+              { class: "form-select" } %>
+        </div>
+      <% end %>
+
+      <!-- Date Range Filters -->
+      <div class="col-md-4">
+        <div class="input-group">
+          <span class="input-group-text">From</span>
+          <%= form.date_field :start_date, 
+              value: @filter_params&.dig(:start_date), 
+              class: "form-control" %>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="input-group">
+          <span class="input-group-text">To</span>
+          <%= form.date_field :end_date, 
+              value: @filter_params&.dig(:end_date), 
+              class: "form-control" %>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="col-12">
+        <div class="d-flex gap-2">
+          <%= form.submit "Apply Filters", class: "btn btn-primary" %>
+          <%= link_to "Reset Filters", posts_path, class: "btn btn-outline-secondary" %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Active Filters Display -->
+    <% if @filter_params&.values&.any?(&:present?) %>
+      <div class="mt-3">
+        <h6 class="text-muted">Active Filters:</h6>
+        <div class="d-flex flex-wrap gap-2">
+          <% if @filter_params[:search].present? %>
+            <span class="badge bg-primary">
+              Search: "<%= @filter_params[:search] %>"
+              <%= link_to "×", posts_path(@filter_params.except(:search)), class: "text-white text-decoration-none ms-1" %>
+            </span>
+          <% end %>
+          
+          <% if @filter_params[:status].present? && @filter_params[:status] != "all" %>
+            <span class="badge bg-info">
+              Status: <%= @filter_params[:status].titleize %>
+              <%= link_to "×", posts_path(@filter_params.except(:status)), class: "text-white text-decoration-none ms-1" %>
+            </span>
+          <% end %>
+          
+          <% if @filter_params[:user_filter].present? && @filter_params[:user_filter] != "all" %>
+            <span class="badge bg-warning">
+              User: <%= @filter_params[:user_filter] == "own" ? "My Posts" : "Others' Posts" %>
+              <%= link_to "×", posts_path(@filter_params.except(:user_filter)), class: "text-white text-decoration-none ms-1" %>
+            </span>
+          <% end %>
+          
+          <% if @filter_params[:start_date].present? || @filter_params[:end_date].present? %>
+            <span class="badge bg-success">
+              Date Range: <%= @filter_params[:start_date] || "Any" %> to <%= @filter_params[:end_date] || "Any" %>
+              <%= link_to "×", posts_path(@filter_params.except(:start_date, :end_date)), class: "text-white text-decoration-none ms-1" %>
+            </span>
+          <% end %>
+          
+          <% if @filter_params[:sort].present? && @filter_params[:sort] != "newest" %>
+            <span class="badge bg-secondary">
+              Sort: <%= @filter_params[:sort].titleize %>
+              <%= link_to "×", posts_path(@filter_params.except(:sort)), class: "text-white text-decoration-none ms-1" %>
+            </span>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div> 
