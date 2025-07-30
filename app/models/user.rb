@@ -27,6 +27,18 @@ class User < ApplicationRecord
   after_create_commit :send_welcome_email
   after_create_commit :notify_admins
 
+  # JWT token generation
+  def generate_jwt
+    JWT.encode(
+      { 
+        id: id, 
+        email: email, 
+        exp: 24.hours.from_now.to_i 
+      },
+      Rails.application.credentials.secret_key_base
+    )
+  end
+
   private
 
   def send_welcome_email

@@ -31,6 +31,22 @@ Rails.application.routes.draw do
     resources :comments, only: [:create, :destroy]
   end
 
+  # API Routes
+  namespace :api do
+    namespace :v1 do
+      # Authentication routes
+      post 'auth/login', to: 'auth#login'
+      post 'auth/register', to: 'auth#register'
+      delete 'auth/logout', to: 'auth#logout'
+      get 'auth/me', to: 'auth#me'
+      
+      # Posts routes
+      resources :posts, param: :slug do
+        resources :comments, only: [:index, :show, :create, :update, :destroy]
+      end
+    end
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

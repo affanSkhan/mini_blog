@@ -15,6 +15,15 @@ gem "redis", "~> 5.0"
 
 # Email preview in development
 gem "letter_opener", group: :development
+
+# JWT authentication for API
+gem "devise-jwt", "~> 0.9.0"
+
+# JSON serialization
+gem "active_model_serializers", "~> 0.10.0"
+
+# Pagination
+gem "kaminari", "~> 1.2"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]

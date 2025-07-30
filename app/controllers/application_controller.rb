@@ -22,4 +22,24 @@ class ApplicationController < ActionController::Base
       redirect_to root_path
     end
   end
+
+  # JWT Authentication for API
+  private
+
+  def authenticate_user_from_token!
+    return unless request.headers['Authorization'].present?
+    
+    token = request.headers['Authorization'].split(' ').last
+    begin
+      decoded_token = JWT.decode(token, Rails.application.credentials.secret_key_base, true, { algorithm: 'HS256' })
+      user_id = decoded_token[0]['id']
+      @current_user = User.find(user_id)
+    rescue JWT::DecodeError, ActiveRecord::RecordNotFound
+      @current_user = nil
+    end
+  end
+
+  def current_user
+    @current_user ||= super || authenticate_user_from_token!
+  end
 end
