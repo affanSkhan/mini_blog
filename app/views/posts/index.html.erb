@@ -30,60 +30,62 @@
       <% end %>
 
       <!-- Posts Grid -->
-      <% if @posts.any? %>
-        <div class="row">
-          <% @posts.each do |post| %>
-            <div class="col-md-6 mb-4">
-              <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-start mb-2">
-                    <h5 class="card-title mb-0">
-                      <%= link_to post.title, post_path(post), class: "text-decoration-none" %>
-                    </h5>
-                    <span class="badge <%= post.published? ? 'bg-success' : 'bg-warning' %>">
-                      <%= post.status.titleize %>
-                    </span>
-                  </div>
-                  
-                  <p class="card-text text-muted">
-                    <%= truncate(post.body, length: 150) %>
-                  </p>
-                  
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="text-muted small">
-                      <i class="fas fa-user"></i> <%= post.user.email %><br>
-                      <i class="fas fa-clock"></i> <%= time_ago_in_words(post.created_at) %> ago
-                    </div>
-                    <div class="text-end">
-                      <span class="badge bg-info">
-                        <i class="fas fa-comments"></i> <%= post.comments.count %>
+      <% cache @posts do %>
+        <% if @posts.any? %>
+          <div class="row">
+            <% @posts.each do |post| %>
+              <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <h5 class="card-title mb-0">
+                        <%= link_to post.title, post_path(post), class: "text-decoration-none" %>
+                      </h5>
+                      <span class="badge <%= post.published? ? 'bg-success' : 'bg-warning' %>">
+                        <%= post.status.titleize %>
                       </span>
                     </div>
+                    
+                    <p class="card-text text-muted">
+                      <%= truncate(post.body, length: 150) %>
+                    </p>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="text-muted small">
+                        <i class="fas fa-user"></i> <%= post.user.email %><br>
+                        <i class="fas fa-clock"></i> <%= time_ago_in_words(post.created_at) %> ago
+                      </div>
+                      <div class="text-end">
+                        <span class="badge bg-info">
+                          <i class="fas fa-comments"></i> <%= post.comments_count %>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="card-footer bg-transparent">
+                    <%= link_to "Read More", post_path(post), class: "btn btn-outline-primary btn-sm" %>
+                    <% if user_signed_in? && post.user == current_user %>
+                      <%= link_to "Edit", edit_post_path(post), class: "btn btn-outline-warning btn-sm ms-1" %>
+                    <% end %>
                   </div>
                 </div>
-                
-                <div class="card-footer bg-transparent">
-                  <%= link_to "Read More", post_path(post), class: "btn btn-outline-primary btn-sm" %>
-                  <% if user_signed_in? && post.user == current_user %>
-                    <%= link_to "Edit", edit_post_path(post), class: "btn btn-outline-warning btn-sm ms-1" %>
-                  <% end %>
-                </div>
               </div>
-            </div>
-          <% end %>
-        </div>
-      <% else %>
-        <div class="alert alert-warning text-center">
-          <i class="fas fa-search"></i>
-          <h5>No posts found</h5>
-          <p class="mb-0">
-            <% if @filter_params&.values&.any?(&:present?) %>
-              Try adjusting your search criteria or filters.
-            <% else %>
-              No posts have been published yet.
             <% end %>
-          </p>
-        </div>
+          </div>
+        <% else %>
+          <div class="alert alert-warning text-center">
+            <i class="fas fa-search"></i>
+            <h5>No posts found</h5>
+            <p class="mb-0">
+              <% if @filter_params&.values&.any?(&:present?) %>
+                Try adjusting your search criteria or filters.
+              <% else %>
+                No posts have been published yet.
+              <% end %>
+            </p>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>

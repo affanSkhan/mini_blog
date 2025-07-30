@@ -68,6 +68,22 @@ class Post < ApplicationRecord
 
   # Callback to ensure slug is generated
   before_validation :generate_slug, on: :create
+  after_commit :regenerate_sitemap, on: [:create, :update, :destroy]
+
+  # Override FriendlyId slug candidates for better uniqueness
+  def should_generate_new_friendly_id?
+    title_changed? || super
+  end
+
+  # Must be public for FriendlyId
+  def normalize_friendly_id(input)
+    input.to_s.downcase.parameterize.truncate(80, omission: '')
+  end
+
+  # Canonical URL for SEO
+  def canonical_url
+    Rails.application.routes.url_helpers.post_url(self)
+  end
 
   private
 
@@ -76,17 +92,7 @@ class Post < ApplicationRecord
     self.slug = title.parameterize if title.present? && slug.blank?
   end
 
-  # Override FriendlyId slug candidates for better uniqueness
-  def should_generate_new_friendly_id?
-    title_changed? || super
-  end
-
-  def normalize_friendly_id(input)
-    input.to_s.downcase.parameterize.truncate(80, omission: '')
-  end
-
-  # Canonical URL for SEO
-  def canonical_url
-    Rails.application.routes.url_helpers.post_url(self)
+  def regenerate_sitemap
+    SitemapRegenJob.perform_later
   end
 end

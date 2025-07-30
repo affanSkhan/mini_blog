@@ -10,7 +10,6 @@
 # Redis configuration
 :redis:
   :url: <%= ENV.fetch("REDIS_URL", "redis://localhost:6379/0") %>
-  :namespace: mini_blog
 
 # Logging
 :logfile: ./log/sidekiq.log

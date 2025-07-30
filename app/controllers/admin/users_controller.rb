@@ -7,6 +7,7 @@ class Admin::UsersController < ApplicationController
   end
 
   def show
+    @posts = @user.posts.order(created_at: :desc).limit(5)
   end
 
   def update

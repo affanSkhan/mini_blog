@@ -95,7 +95,7 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="text-center">
-                    <h3 class="text-info"><%= @user.comments.count %></h3>
+                                         <h3 class="text-info"><%= @user.comments_count %></h3>
                     <p class="text-muted">Total Comments</p>
                   </div>
                 </div>
@@ -168,7 +168,7 @@
                       </td>
                       <td><%= post.created_at.strftime("%B %d, %Y") %></td>
                       <td>
-                        <span class="badge bg-info"><%= post.comments.count %></span>
+                        <span class="badge bg-info"><%= post.comments_count %></span>
                       </td>
                       <td>
                         <%= link_to "View", post_path(post), class: "btn btn-sm btn-outline-info" %>

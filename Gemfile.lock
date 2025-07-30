@@ -88,7 +88,6 @@ GEM
     bcrypt (3.1.20)
     bcrypt_pbkdf (1.1.1)
     bcrypt_pbkdf (1.1.1-arm64-darwin)
-    bcrypt_pbkdf (1.1.1-x64-mingw-ucrt)
     bcrypt_pbkdf (1.1.1-x86_64-darwin)
     benchmark (0.4.1)
     bigdecimal (3.2.2)
@@ -98,6 +97,9 @@ GEM
     brakeman (7.1.0)
       racc
     builder (3.3.0)
+    bullet (8.0.8)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     capybara (3.40.0)
       addressable
       matrix
@@ -212,6 +214,8 @@ GEM
       net-smtp
     marcel (1.0.4)
     matrix (0.4.3)
+    meta-tags (2.22.1)
+      actionpack (>= 6.0.0, < 8.1)
     mini_mime (1.1.5)
     minitest (5.25.5)
     msgpack (1.8.0)
@@ -241,8 +245,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.9-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.18.9-x64-mingw-ucrt)
-      racc (~> 1.4)
     nokogiri (1.18.9-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.18.9-x86_64-linux-gnu)
@@ -258,7 +260,6 @@ GEM
     pg (1.6.0)
     pg (1.6.0-aarch64-linux)
     pg (1.6.0-arm64-darwin)
-    pg (1.6.0-x64-mingw-ucrt)
     pg (1.6.0-x86_64-darwin)
     pg (1.6.0-x86_64-linux)
     pp (0.6.2)
@@ -382,6 +383,8 @@ GEM
       logger
       rack (>= 2.2.4)
       redis-client (>= 0.22.2)
+    sitemap_generator (6.3.0)
+      builder (~> 3.0)
     solid_cable (3.0.11)
       actioncable (>= 7.2)
       activejob (>= 7.2)
@@ -421,11 +424,10 @@ GEM
       railties (>= 7.1.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2025.2)
-      tzinfo (>= 1.0.0)
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
+    uniform_notifier (1.17.0)
     uri (1.0.3)
     useragent (0.16.11)
     warden (1.2.9)
@@ -456,9 +458,7 @@ PLATFORMS
   arm-linux-gnu
   arm-linux-musl
   arm64-darwin
-  x64-mingw-ucrt
   x86_64-darwin
-  x86_64-linux
   x86_64-linux-gnu
   x86_64-linux-musl
 
@@ -466,6 +466,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   bootsnap
   brakeman
+  bullet
   capybara
   chartkick (~> 5.0)
   csv
@@ -478,6 +479,7 @@ DEPENDENCIES
   kamal
   kaminari (~> 1.2)
   letter_opener
+  meta-tags (~> 2.18)
   pg (~> 1.1)
   propshaft
   psych (~> 4.0)
@@ -489,6 +491,7 @@ DEPENDENCIES
   rubocop-rails-omakase
   selenium-webdriver
   sidekiq (~> 7.0)
+  sitemap_generator (~> 6.2)
   solid_cable
   solid_cache
   solid_queue

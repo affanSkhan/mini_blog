@@ -3,12 +3,11 @@ class PostsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index, :show]
   
   # Set up before actions for finding posts and checking ownership
-  before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :set_post, only: [:edit, :update, :destroy]
   before_action :ensure_owner!, only: [:edit, :update, :destroy]
 
   def index
-    # Start with published posts for guests, all posts for logged-in users
-    @posts = user_signed_in? ? Post.all : Post.published
+    @posts = Post.published.includes(:user)
     
     # Apply search filter
     @posts = @posts.search(params[:search])
@@ -47,20 +46,28 @@ class PostsController < ApplicationController
     @users = User.all if user_signed_in?
   rescue Date::Error
     # Handle invalid date format
-    @posts = user_signed_in? ? Post.all : Post.published
+    @posts = Post.published
     @posts = @posts.order(created_at: :desc)
     flash.now[:alert] = "Invalid date format. Please use YYYY-MM-DD format."
   end
 
   def show
-    if request.path != post_path(@post)
-      return redirect_to @post, status: :moved_permanently
-    end
+    # Load post with comments for display
+    @post = Post.includes(:user, :comments).friendly.find(params[:slug])
+    
     # Check if user can view this post
     unless @post.published? || (user_signed_in? && @post.user == current_user)
-      redirect_to posts_path, alert: "Post not found or not accessible."
+      render file: Rails.root.join('public/404.html'), status: :not_found, layout: false
       return
     end
+    
+    # Handle canonical URL redirect
+    fresh_when(@post)
+    if request.path != post_path(@post)
+      redirect_to @post, status: :moved_permanently
+    end
+  rescue ActiveRecord::RecordNotFound
+    render file: Rails.root.join('public/404.html'), status: :not_found, layout: false
   end
 
   def new
@@ -99,9 +106,7 @@ class PostsController < ApplicationController
   private
 
   def set_post
-    @post = Post.friendly.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to posts_path, alert: "Post not found."
+    @post = Post.includes(:user).friendly.find(params[:slug])
   end
 
   def ensure_owner!

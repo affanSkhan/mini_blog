@@ -32,7 +32,7 @@
               <p class="text-muted">Drafts</p>
             </div>
             <div class="col-md-3 text-center">
-              <h4 class="text-info"><%= @user.comments.count %></h4>
+                             <h4 class="text-info"><%= @user.comments_count %></h4>
               <p class="text-muted">Comments Made</p>
             </div>
           </div>
@@ -77,7 +77,7 @@
                       <td><%= post.created_at.strftime("%B %d, %Y") %></td>
                       <td><%= post.updated_at.strftime("%B %d, %Y") %></td>
                       <td>
-                        <span class="badge bg-info"><%= post.comments.count %></span>
+                        <span class="badge bg-info"><%= post.comments_count %></span>
                       </td>
                       <td>
                         <div class="btn-group" role="group">
