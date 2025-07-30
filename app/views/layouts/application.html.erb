@@ -8,6 +8,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%= display_meta_tags(site: 'Mini Blog', reverse: true, separator: '|', description: 'A modern, fast, and beautiful blogging platform.', canonical: request.original_url, og: { title: :title, description: :description, type: 'website', url: request.original_url, image: image_url('icon.png') }, twitter: { card: 'summary_large_image', site: '@yourtwitter', image: image_url('icon.png') }) %>
+
     <%= yield :head %>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>

@@ -101,3 +101,6 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "meta-tags", "~> 2.18"
+gem "sitemap_generator", "~> 6.2"

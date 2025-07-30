@@ -1,3 +1,47 @@
+<%# --- SEO Meta Tags --- %>
+<% content_for :title, @post.title %>
+<% content_for :description, truncate(strip_tags(@post.body), length: 160) %>
+<% set_meta_tags title: @post.title,
+                description: truncate(strip_tags(@post.body), length: 160),
+                canonical: post_url(@post),
+                og: {
+                  title: @post.title,
+                  description: truncate(strip_tags(@post.body), length: 160),
+                  type: 'article',
+                  url: post_url(@post),
+                  image: image_url('icon.png')
+                },
+                twitter: {
+                  card: 'summary_large_image',
+                  site: '@yourtwitter',
+                  title: @post.title,
+                  description: truncate(strip_tags(@post.body), length: 160),
+                  image: image_url('icon.png')
+                } %>
+<%# --- Canonical Link --- %>
+<link rel="canonical" href="<%= post_url(@post) %>" />
+
+<%# --- JSON-LD Structured Data --- %>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "<%= j @post.title %>",
+  "description": "<%= j truncate(strip_tags(@post.body), length: 160) %>",
+  "author": {
+    "@type": "Person",
+    "name": "<%= j @post.user.email %>"
+  },
+  "datePublished": "<%= @post.created_at.iso8601 %>",
+  "dateModified": "<%= @post.updated_at.iso8601 %>",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "<%= post_url(@post) %>"
+  },
+  "image": "<%= image_url('icon.png') %>"
+}
+</script>
+
 <div class="container mt-4">
   <div class="row justify-content-center">
     <div class="col-lg-8">

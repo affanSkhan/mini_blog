@@ -53,6 +53,9 @@ class PostsController < ApplicationController
   end
 
   def show
+    if request.path != post_path(@post)
+      return redirect_to @post, status: :moved_permanently
+    end
     # Check if user can view this post
     unless @post.published? || (user_signed_in? && @post.user == current_user)
       redirect_to posts_path, alert: "Post not found or not accessible."

@@ -1,61 +1,38 @@
-<%= form_with(model: post, local: true) do |form| %>
-  <% if post.errors.any? %>
-    <div class="alert alert-danger">
-      <h6 class="alert-heading">
-        <%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:
-      </h6>
-      <ul class="mb-0">
-        <% post.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
+<article>
+  <%= form_with(model: post, local: true) do |form| %>
+    <% if post.errors.any? %>
+      <section class="alert alert-danger">
+        <h4><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h4>
+        <ul>
+          <% post.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </section>
+    <% end %>
+
+    <section class="mb-3">
+      <%= form.label :title, class: "form-label" %>
+      <%= form.text_field :title, class: "form-control", required: true, autofocus: true %>
+    </section>
+
+    <section class="mb-3">
+      <%= form.label :body, class: "form-label" %>
+      <%= form.text_area :body, class: "form-control", rows: 8, required: true %>
+    </section>
+
+    <section class="mb-3">
+      <%= form.label :status, class: "form-label" %>
+      <%= form.select :status, Post.statuses.keys.map { |s| [s.titleize, s] }, {}, class: "form-select" %>
+    </section>
+
+    <%# Example image with alt and dimensions for Lighthouse %>
+    <section class="mb-3">
+      <img src="<%= image_url('icon.png') %>" alt="Mini Blog Icon" width="64" height="64" loading="lazy">
+    </section>
+
+    <section class="mb-3">
+      <%= form.submit class: "btn btn-primary" %>
+    </section>
   <% end %>
-
-  <div class="mb-3">
-    <%= form.label :title, class: "form-label" %>
-    <%= form.text_field :title, class: "form-control #{'is-invalid' if post.errors[:title].any?}", placeholder: "Enter post title" %>
-    <% if post.errors[:title].any? %>
-      <div class="invalid-feedback">
-        <%= post.errors[:title].join(', ') %>
-      </div>
-    <% end %>
-  </div>
-
-  <div class="mb-3">
-    <%= form.label :body, class: "form-label" %>
-    <%= form.text_area :body, rows: 10, class: "form-control #{'is-invalid' if post.errors[:body].any?}", placeholder: "Write your post content here..." %>
-    <% if post.errors[:body].any? %>
-      <div class="invalid-feedback">
-        <%= post.errors[:body].join(', ') %>
-      </div>
-    <% end %>
-    <div class="form-text">
-      Use markdown formatting for better content presentation.
-    </div>
-  </div>
-
-  <div class="mb-3">
-    <%= form.label :status, class: "form-label" %>
-    <%= form.select :status, 
-                    options_for_select([
-                      ['Draft', 'draft'],
-                      ['Published', 'published']
-                    ], post.status), 
-                    {}, 
-                    class: "form-select #{'is-invalid' if post.errors[:status].any?}" %>
-    <% if post.errors[:status].any? %>
-      <div class="invalid-feedback">
-        <%= post.errors[:status].join(', ') %>
-      </div>
-    <% end %>
-    <div class="form-text">
-      <strong>Draft:</strong> Only you can see this post. <strong>Published:</strong> Everyone can see this post.
-    </div>
-  </div>
-
-  <div class="d-flex gap-2">
-    <%= form.submit class: "btn btn-primary" %>
-    <%= link_to "Cancel", posts_path, class: "btn btn-outline-secondary" %>
-  </div>
-<% end %> 
+</article> 
