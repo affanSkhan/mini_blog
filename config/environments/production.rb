@@ -50,7 +50,8 @@ Rails.application.configure do
   config.active_support.report_deprecations = false
 
   # Replace the default in-process memory cache store with a durable alternative.
-  config.cache_store = :solid_cache_store
+  # Using memory store temporarily to avoid solid_cache table issues
+  config.cache_store = :memory_store
 
   # Use Sidekiq for background job processing
   config.active_job.queue_adapter = :sidekiq
