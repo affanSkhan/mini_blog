@@ -21,12 +21,12 @@ production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
 
-  # ✅ Add this to fix SolidCache error
+  # ✅ Nest cache under production
   cache:
     <<: *default
     url: <%= ENV['DATABASE_URL'] %>
 
-# ✅ ActionCable (already correctly set)
+# ✅ This is correct for ActionCable
 cable:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
