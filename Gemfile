@@ -17,7 +17,7 @@ gem "redis", "~> 5.0"
 gem "letter_opener", group: :development
 
 # JWT authentication for API
-gem "devise-jwt", "~> 0.9.0"
+gem "devise-jwt", "~> 0.12.1"
 
 # JSON serialization
 gem "active_model_serializers", "~> 0.10.0"
