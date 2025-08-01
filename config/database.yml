@@ -21,7 +21,12 @@ production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
 
-# Tell SolidCable / ActionCable to use the same production DB:
+  # ✅ Add this to fix SolidCache error
+  cache:
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
+
+# ✅ ActionCable (already correctly set)
 cable:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
