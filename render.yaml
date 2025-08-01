@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: mini_blog
+    env: ruby
+    buildCommand: "bundle install && bundle exec rake db:migrate"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    envVars:
+      - key: RAILS_ENV
+        value: production
