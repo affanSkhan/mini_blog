@@ -61,38 +61,4 @@ FriendlyId.defaults do |config|
   # By default, slug has no size limit, but you can change it if you wish.
   #
   # config.slug_limit = 50
-  #
-  # When FriendlyId can not generate a unique ID from your base method, it appends
-  # a UUID, separated by a single dash. You can configure the character used as the
-  # separator. If you're upgrading from FriendlyId 4, you may wish to replace this
-  # with two dashes.
-  #
-  config.sequence_separator = '-'
-  #
-  # Note that you must use the :slugged addon **prior** to the line which
-  # configures the sequence separator, or else FriendlyId will raise an undefined
-  # method error.
-  #
-  #  ## Tips and Tricks
-  #
-  #  ### Controlling when slugs are generated
-  #
-  # As of FriendlyId 5.0, new slugs are generated only when the slug field
-  # is nil, but if you're using a column as your base method can change this
-  # behavior by overriding the `should_generate_new_friendly_id?` method that
-  # FriendlyId adds to your model. The change below makes FriendlyId 5.0 behave
-  # more like 4.0.
-  # Note: You'll also need to disable the uniqueness validation in your model,
-  # with `validates :slug, uniqueness: false`, and instead add the scope to the
-  # `friendly_id` call: `friendly_id :name, use: :slugged, scope: :user`.
-  
-  # ## Getting Started
-  #
-  # This is the minimum you need to do in your models:
-  #
-  #     extend FriendlyId
-  #     friendly_id :name, use: :slugged
-  #
-  # Note that you'll need to create a migration to add the `slug` column to the
-  # table for the model you're using FriendlyId with.
 end
