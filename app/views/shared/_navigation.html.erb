@@ -34,10 +34,10 @@
       <ul class="navbar-nav">
         <% if user_signed_in? %>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="nav-link dropdown-toggle" type="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fas fa-user-circle me-1"></i>
               <%= current_user.email %>
-            </a>
+            </button>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <li>
                 <%= link_to edit_user_registration_path, class: "dropdown-item" do %>
