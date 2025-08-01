@@ -22,23 +22,27 @@ class Post < ApplicationRecord
   
   # Search scope
   scope :search, ->(query) {
-    where("title ILIKE ? OR body ILIKE ?", "%#{query}%", "%#{query}%") if query.present?
+    return all if query.blank?
+    where("title ILIKE ? OR body ILIKE ?", "%#{query}%", "%#{query}%")
   }
   
   # Date range scope
   scope :date_range, ->(start_date, end_date) {
+    scope = all
     if start_date.present? && end_date.present?
-      where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+      scope = scope.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
     elsif start_date.present?
-      where("created_at >= ?", start_date.beginning_of_day)
+      scope = scope.where("created_at >= ?", start_date.beginning_of_day)
     elsif end_date.present?
-      where("created_at <= ?", end_date.end_of_day)
+      scope = scope.where("created_at <= ?", end_date.end_of_day)
     end
+    scope
   }
   
   # Status filter scope
   scope :with_status, ->(status) {
-    where(status: status) if status.present? && status != "all"
+    return all if status.blank? || status == "all"
+    where(status: status)
   }
   
   # User filter scope
@@ -56,7 +60,7 @@ class Post < ApplicationRecord
     when "most_commented"
       left_joins(:comments)
         .group(:id)
-        .order("COUNT(comments.id) DESC")
+        .order("COUNT(comments.id) DESC, created_at DESC")
     when "title_asc"
       order(title: :asc)
     when "title_desc"
@@ -72,7 +76,7 @@ class Post < ApplicationRecord
 
   # Override FriendlyId slug candidates for better uniqueness
   def should_generate_new_friendly_id?
-    title_changed? || super
+    title_changed? || slug.blank?
   end
 
   # Must be public for FriendlyId
@@ -89,7 +93,9 @@ class Post < ApplicationRecord
 
   def generate_slug
     # Generate slug from title if not present
-    self.slug = title.parameterize if title.present? && slug.blank?
+    if title.present? && slug.blank?
+      self.slug = title.parameterize.truncate(80, omission: '')
+    end
   end
 
   def regenerate_sitemap

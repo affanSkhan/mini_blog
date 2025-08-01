@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
+  # Commented out to avoid potential issues in production
+  # allow_browser versions: :modern
 
   # Include Pundit for authorization
   include Pundit::Authorization
