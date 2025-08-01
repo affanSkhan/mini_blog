@@ -18,15 +18,14 @@ test:
   host: localhost
 
 production:
-  <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
+  primary:
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
 
-  # ✅ Nest cache under production
   cache:
     <<: *default
     url: <%= ENV['DATABASE_URL'] %>
 
-# ✅ This is correct for ActionCable
 cable:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
