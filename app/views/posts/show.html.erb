@@ -194,7 +194,7 @@
               </h5>
             </div>
             <div class="card-body">
-              <%= form_with(model: [@post, Comment.new], local: true) do |form| %>
+              <%= form_with(model: [@post, @comment], local: true) do |form| %>
                 <div class="mb-3">
                   <%= form.label :body, class: "form-label fw-medium" do %>
                     <i class="fas fa-comment me-2"></i>Your Comment
@@ -204,9 +204,11 @@
                       class: "form-control", 
                       placeholder: "Share your thoughts..." %>
                 </div>
-                <%= form.submit "Post Comment", class: "btn btn-primary" do %>
-                  <i class="fas fa-paper-plane me-2"></i>Post Comment
-                <% end %>
+                <div class="d-flex justify-content-end">
+                  <%= form.submit "Post Comment", class: "btn btn-primary" do %>
+                    <i class="fas fa-paper-plane me-2"></i>Post Comment
+                  <% end %>
+                </div>
               <% end %>
             </div>
           </div>

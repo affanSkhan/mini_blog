@@ -89,6 +89,9 @@ class PostsController < ApplicationController
         return
       end
       
+      # Initialize new comment for form
+      @comment = @post.comments.build if user_signed_in?
+      
       # Handle canonical URL redirect
       if request.path != post_path(@post)
         redirect_to @post, status: :moved_permanently
