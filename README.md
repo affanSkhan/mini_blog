@@ -96,6 +96,48 @@ A full-featured blogging platform where users can register, log in, manage their
 
 ---
 
+## 🚀 Deployment
+
+### Railway (Recommended - Free)
+
+1. **Push to GitHub**:
+   ```bash
+   git add .
+   git commit -m "Prepare for deployment"
+   git push origin main
+   ```
+
+2. **Deploy on Railway**:
+   - Go to [railway.app](https://railway.app)
+   - Sign up with GitHub
+   - Click "New Project" → "Deploy from GitHub repo"
+   - Select your repository
+   - Railway will auto-detect Rails and deploy
+
+3. **Add Environment Variables**:
+   - `RAILS_MASTER_KEY`: Your Rails master key
+   - `DATABASE_URL`: Railway will provide this automatically
+   - `REDIS_URL`: For Sidekiq (Railway provides Redis)
+
+4. **Run Database Migrations**:
+   ```bash
+   railway run rails db:migrate
+   ```
+
+5. **Create Admin User**:
+   ```bash
+   railway run rails console
+   User.create!(email: "admin@example.com", password: "password123", password_confirmation: "password123", admin: true)
+   ```
+
+### Alternative Platforms
+
+- **Render**: [render.com](https://render.com) - Free tier with 750 hours/month
+- **Fly.io**: [fly.io](https://fly.io) - Free tier with 3 VMs
+- **Heroku**: [heroku.com](https://heroku.com) - Paid only ($7/month)
+
+---
+
 ## 🚦 How to Run the Project
 
 ### 1. Clone the repo
