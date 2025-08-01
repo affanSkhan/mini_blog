@@ -1,38 +1,102 @@
-<article>
-  <%= form_with(model: post, local: true) do |form| %>
-    <% if post.errors.any? %>
-      <section class="alert alert-danger">
-        <h4><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h4>
-        <ul>
-          <% post.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </section>
+<div class="card shadow-lg border-0">
+  <div class="card-body p-5">
+    <%= form_with(model: post, local: true) do |form| %>
+      <% if post.errors.any? %>
+        <div class="alert alert-danger mb-4">
+          <div class="d-flex align-items-center mb-2">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <h5 class="mb-0"><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h5>
+          </div>
+          <ul class="mb-0">
+            <% post.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="mb-4">
+            <%= form.label :title, class: "form-label fw-medium" do %>
+              <i class="fas fa-heading me-2"></i>Post Title
+            <% end %>
+            <%= form.text_field :title, 
+                class: "form-control form-control-lg", 
+                required: true, 
+                autofocus: true,
+                placeholder: "Enter your post title..." %>
+          </div>
+
+          <div class="mb-4">
+            <%= form.label :body, class: "form-label fw-medium" do %>
+              <i class="fas fa-align-left me-2"></i>Content
+            <% end %>
+            <%= form.text_area :body, 
+                class: "form-control", 
+                rows: 12, 
+                required: true,
+                placeholder: "Write your post content here..." %>
+            <div class="form-text">
+              <i class="fas fa-info-circle me-1"></i>
+              Use markdown formatting for better content structure.
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-4">
+          <div class="card bg-light border-0">
+            <div class="card-body">
+              <h5 class="card-title mb-4">
+                <i class="fas fa-cog me-2"></i>Post Settings
+              </h5>
+              
+              <div class="mb-4">
+                <%= form.label :status, class: "form-label fw-medium" do %>
+                  <i class="fas fa-toggle-on me-2"></i>Status
+                <% end %>
+                <%= form.select :status, 
+                    Post.statuses.keys.map { |s| [s.titleize, s] }, 
+                    {}, 
+                    class: "form-select" %>
+                <div class="form-text">
+                  <i class="fas fa-info-circle me-1"></i>
+                  Draft posts are only visible to you.
+                </div>
+              </div>
+              
+              <div class="mb-4">
+                <label class="form-label fw-medium">
+                  <i class="fas fa-eye me-2"></i>Preview
+                </label>
+                <div class="d-grid gap-2">
+                  <%= link_to "#", class: "btn btn-outline-primary btn-sm", id: "preview-btn" do %>
+                    <i class="fas fa-eye me-1"></i>Preview Post
+                  <% end %>
+                </div>
+              </div>
+              
+              <div class="mb-4">
+                <label class="form-label fw-medium">
+                  <i class="fas fa-save me-2"></i>Save Options
+                </label>
+                <div class="d-grid gap-2">
+                  <%= form.submit class: "btn btn-primary" do %>
+                    <i class="fas fa-save me-2"></i>
+                    <%= post.new_record? ? 'Create Post' : 'Update Post' %>
+                  <% end %>
+                  
+                  <% unless post.new_record? %>
+                    <%= link_to post_path(post), class: "btn btn-outline-secondary" do %>
+                      <i class="fas fa-times me-2"></i>Cancel
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     <% end %>
-
-    <section class="mb-3">
-      <%= form.label :title, class: "form-label" %>
-      <%= form.text_field :title, class: "form-control", required: true, autofocus: true %>
-    </section>
-
-    <section class="mb-3">
-      <%= form.label :body, class: "form-label" %>
-      <%= form.text_area :body, class: "form-control", rows: 8, required: true %>
-    </section>
-
-    <section class="mb-3">
-      <%= form.label :status, class: "form-label" %>
-      <%= form.select :status, Post.statuses.keys.map { |s| [s.titleize, s] }, {}, class: "form-select" %>
-    </section>
-
-    <%# Example image with alt and dimensions for Lighthouse %>
-    <section class="mb-3">
-      <img src="<%= image_url('icon.png') %>" alt="Mini Blog Icon" width="64" height="64" loading="lazy">
-    </section>
-
-    <section class="mb-3">
-      <%= form.submit class: "btn btn-primary" %>
-    </section>
-  <% end %>
-</article> 
+  </div>
+</div> 

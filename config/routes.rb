@@ -5,8 +5,7 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  # Rails Admin (admin only)
-  mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
+  # Rails Admin removed - using custom admin dashboard instead
 
   # Devise routes for user authentication
   devise_for :users
@@ -16,6 +15,9 @@ Rails.application.routes.draw do
 
   # Dashboard route - requires authentication
   get "dashboard", to: "dashboard#index", as: :dashboard
+
+  # API Explorer route
+  get "api-explorer", to: "home#api_explorer", as: :api_explorer
 
   # Admin namespace
   namespace :admin do

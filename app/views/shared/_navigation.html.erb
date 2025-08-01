@@ -1,0 +1,77 @@
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container">
+    <%= link_to root_path, class: "navbar-brand" do %>
+      <i class="fas fa-blog me-2"></i>Mini Blog
+    <% end %>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <%= link_to "Home", root_path, class: "nav-link #{current_page?(root_path) ? 'active' : ''}" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Posts", posts_path, class: "nav-link #{controller_name == 'posts' && action_name != 'new' && action_name != 'edit' ? 'active' : ''}" %>
+        </li>
+        <% if user_signed_in? && current_user.admin? %>
+          <li class="nav-item">
+            <%= link_to "API Explorer", api_explorer_path, class: "nav-link #{controller_name == 'home' && action_name == 'api_explorer' ? 'active' : ''}" %>
+          </li>
+        <% end %>
+        <% if user_signed_in? %>
+          <li class="nav-item">
+            <%= link_to "Dashboard", dashboard_path, class: "nav-link #{controller_name == 'dashboard' ? 'active' : ''}" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "New Post", new_post_path, class: "nav-link #{controller_name == 'posts' && (action_name == 'new' || action_name == 'edit') ? 'active' : ''}" %>
+          </li>
+        <% end %>
+      </ul>
+      
+      <ul class="navbar-nav">
+        <% if user_signed_in? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-user-circle me-1"></i>
+              <%= current_user.email %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li>
+                <%= link_to edit_user_registration_path, class: "dropdown-item" do %>
+                  <i class="fas fa-user-edit me-2"></i>Edit Profile
+                <% end %>
+              </li>
+              <% if current_user.admin? %>
+                <li>
+                  <%= link_to admin_dashboard_path, class: "dropdown-item" do %>
+                    <i class="fas fa-tachometer-alt me-2"></i>Admin Panel
+                  <% end %>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+              <% end %>
+              <li>
+                <%= button_to destroy_user_session_path, method: :delete, class: "dropdown-item text-danger", form: { style: 'display: inline;' } do %>
+                  <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+                <% end %>
+              </li>
+            </ul>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to new_user_session_path, class: "nav-link" do %>
+              <i class="fas fa-sign-in-alt me-1"></i>Sign In
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <%= link_to new_user_registration_path, class: "btn btn-primary btn-sm ms-2" do %>
+              <i class="fas fa-user-plus me-1"></i>Sign Up
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav> 

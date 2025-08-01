@@ -25,8 +25,8 @@ gem "active_model_serializers", "~> 0.10.0"
 # Pagination
 gem "kaminari", "~> 1.2"
 
-# Admin panel
-gem "rails_admin", "~> 3.0"
+# Admin panel (commented out - using custom admin dashboard instead)
+# gem "rails_admin", "~> 2.2"
 
 # Authorization
 gem "pundit", "~> 2.3"

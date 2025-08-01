@@ -1,0 +1,282 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <!-- Header -->
+      <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary mb-3">
+          <i class="fas fa-code me-2"></i>API Explorer
+        </h1>
+        <p class="lead text-muted">Test the Mini Blog API endpoints with this interactive explorer</p>
+      </div>
+
+      <!-- API Documentation -->
+      <div class="card shadow-lg border-0 mb-5">
+        <div class="card-header bg-light">
+          <h4 class="mb-0">
+            <i class="fas fa-book me-2"></i>API Documentation
+          </h4>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h5>Authentication</h5>
+              <p class="text-muted">All API endpoints require JWT authentication. Include the token in the Authorization header:</p>
+              <code class="d-block p-3 bg-light rounded">Authorization: Bearer YOUR_JWT_TOKEN</code>
+            </div>
+            <div class="col-md-6">
+              <h5>Base URL</h5>
+              <p class="text-muted">All endpoints are prefixed with:</p>
+              <code class="d-block p-3 bg-light rounded">/api/v1</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Token Input -->
+      <div class="card shadow-lg border-0 mb-5">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">
+            <i class="fas fa-key me-2"></i>Authentication Token
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8">
+              <label class="form-label fw-medium">JWT Token</label>
+              <input type="text" id="jwt-token" class="form-control" placeholder="Enter your JWT token here...">
+              <div class="form-text">
+                <i class="fas fa-info-circle me-1"></i>
+                Get your token by signing in and checking the response headers or localStorage.
+              </div>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <button class="btn btn-primary w-100" onclick="testAuth()">
+                <i class="fas fa-check me-2"></i>Test Token
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- API Endpoints -->
+      <div class="row">
+        <!-- Posts Endpoints -->
+        <div class="col-lg-6 mb-4">
+          <div class="card h-100 shadow-lg border-0">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-file-alt me-2"></i>Posts API
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-4">
+                <h6>GET /api/v1/posts</h6>
+                <p class="text-muted small">Retrieve all published posts</p>
+                <button class="btn btn-outline-primary btn-sm" onclick="testEndpoint('GET', '/api/v1/posts')">
+                  <i class="fas fa-play me-1"></i>Test
+                </button>
+              </div>
+              
+              <div class="mb-4">
+                <h6>GET /api/v1/posts/:id</h6>
+                <p class="text-muted small">Retrieve a specific post</p>
+                <div class="input-group input-group-sm mb-2">
+                  <input type="number" id="post-id" class="form-control" placeholder="Post ID" value="1">
+                  <button class="btn btn-outline-primary" onclick="testEndpoint('GET', '/api/v1/posts/' + document.getElementById('post-id').value)">
+                    <i class="fas fa-play me-1"></i>Test
+                  </button>
+                </div>
+              </div>
+              
+              <div class="mb-4">
+                <h6>POST /api/v1/posts</h6>
+                <p class="text-muted small">Create a new post (requires auth)</p>
+                <button class="btn btn-outline-success btn-sm" onclick="testCreatePost()">
+                  <i class="fas fa-play me-1"></i>Test
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comments Endpoints -->
+        <div class="col-lg-6 mb-4">
+          <div class="card h-100 shadow-lg border-0">
+            <div class="card-header bg-success text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-comments me-2"></i>Comments API
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-4">
+                <h6>GET /api/v1/posts/:id/comments</h6>
+                <p class="text-muted small">Get comments for a post</p>
+                <div class="input-group input-group-sm mb-2">
+                  <input type="number" id="comment-post-id" class="form-control" placeholder="Post ID" value="1">
+                  <button class="btn btn-outline-success" onclick="testEndpoint('GET', '/api/v1/posts/' + document.getElementById('comment-post-id').value + '/comments')">
+                    <i class="fas fa-play me-1"></i>Test
+                  </button>
+                </div>
+              </div>
+              
+              <div class="mb-4">
+                <h6>POST /api/v1/posts/:id/comments</h6>
+                <p class="text-muted small">Create a comment (requires auth)</p>
+                <button class="btn btn-outline-success btn-sm" onclick="testCreateComment()">
+                  <i class="fas fa-play me-1"></i>Test
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Response Display -->
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">
+            <i class="fas fa-terminal me-2"></i>API Response
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge bg-secondary" id="response-status">No request made</span>
+              <button class="btn btn-outline-secondary btn-sm" onclick="clearResponse()">
+                <i class="fas fa-trash me-1"></i>Clear
+              </button>
+            </div>
+          </div>
+          <pre id="response-body" class="bg-light p-3 rounded" style="max-height: 400px; overflow-y: auto;">No response yet. Make a request to see the result.</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentToken = '';
+
+function testAuth() {
+  const token = document.getElementById('jwt-token').value;
+  if (!token) {
+    showResponse('Please enter a JWT token first', 'error');
+    return;
+  }
+  
+  currentToken = token;
+  testEndpoint('GET', '/api/v1/posts');
+}
+
+function testEndpoint(method, endpoint) {
+  if (!currentToken) {
+    showResponse('Please set a JWT token first', 'error');
+    return;
+  }
+  
+  const url = endpoint.startsWith('http') ? endpoint : window.location.origin + endpoint;
+  
+  fetch(url, {
+    method: method,
+    headers: {
+      'Authorization': `Bearer ${currentToken}`,
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => {
+    const status = response.status;
+    document.getElementById('response-status').textContent = `${method} ${endpoint} - ${status}`;
+    document.getElementById('response-status').className = `badge ${status >= 200 && status < 300 ? 'bg-success' : 'bg-danger'}`;
+    
+    return response.json();
+  })
+  .then(data => {
+    showResponse(JSON.stringify(data, null, 2));
+  })
+  .catch(error => {
+    showResponse(`Error: ${error.message}`, 'error');
+  });
+}
+
+function testCreatePost() {
+  if (!currentToken) {
+    showResponse('Please set a JWT token first', 'error');
+    return;
+  }
+  
+  const postData = {
+    title: 'Test Post from API Explorer',
+    body: 'This is a test post created via the API explorer.',
+    status: 'draft'
+  };
+  
+  fetch('/api/v1/posts', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${currentToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(postData)
+  })
+  .then(response => {
+    const status = response.status;
+    document.getElementById('response-status').textContent = `POST /api/v1/posts - ${status}`;
+    document.getElementById('response-status').className = `badge ${status >= 200 && status < 300 ? 'bg-success' : 'bg-danger'}`;
+    
+    return response.json();
+  })
+  .then(data => {
+    showResponse(JSON.stringify(data, null, 2));
+  })
+  .catch(error => {
+    showResponse(`Error: ${error.message}`, 'error');
+  });
+}
+
+function testCreateComment() {
+  if (!currentToken) {
+    showResponse('Please set a JWT token first', 'error');
+    return;
+  }
+  
+  const postId = document.getElementById('comment-post-id').value || '1';
+  const commentData = {
+    body: 'This is a test comment created via the API explorer.'
+  };
+  
+  fetch(`/api/v1/posts/${postId}/comments`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${currentToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(commentData)
+  })
+  .then(response => {
+    const status = response.status;
+    document.getElementById('response-status').textContent = `POST /api/v1/posts/${postId}/comments - ${status}`;
+    document.getElementById('response-status').className = `badge ${status >= 200 && status < 300 ? 'bg-success' : 'bg-danger'}`;
+    
+    return response.json();
+  })
+  .then(data => {
+    showResponse(JSON.stringify(data, null, 2));
+  })
+  .catch(error => {
+    showResponse(`Error: ${error.message}`, 'error');
+  });
+}
+
+function showResponse(data, type = 'success') {
+  const responseBody = document.getElementById('response-body');
+  responseBody.textContent = data;
+  responseBody.className = `bg-light p-3 rounded ${type === 'error' ? 'border border-danger' : ''}`;
+}
+
+function clearResponse() {
+  document.getElementById('response-status').textContent = 'No request made';
+  document.getElementById('response-status').className = 'badge bg-secondary';
+  document.getElementById('response-body').textContent = 'No response yet. Make a request to see the result.';
+  document.getElementById('response-body').className = 'bg-light p-3 rounded';
+}
+</script> 

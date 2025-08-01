@@ -1,36 +1,75 @@
-<div class="container mt-4">
-  <div class="row">
+<div class="container py-5">
+  <!-- Dashboard Header -->
+  <div class="row mb-5">
     <div class="col-12">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Mini Blog Dashboard</a>
-          <div class="navbar-nav ms-auto">
-            <span class="navbar-text me-3">
-              Welcome, <%= @user.email %>
-            </span>
-            <%= link_to "Edit Profile", edit_user_registration_path, class: "btn btn-outline-primary me-2" %>
-            <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-outline-danger" %>
-          </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="display-6 fw-bold text-primary mb-2">
+            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+          </h1>
+          <p class="lead text-muted">Welcome back, <%= @user.email %></p>
         </div>
-      </nav>
+        <div class="d-flex gap-3">
+          <%= link_to new_post_path, class: "btn btn-primary" do %>
+            <i class="fas fa-plus me-2"></i>New Post
+          <% end %>
+          <%= link_to edit_user_registration_path, class: "btn btn-outline-primary" do %>
+            <i class="fas fa-user-edit me-2"></i>Edit Profile
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="dashboard-stats mb-5">
+    <div class="stat-card">
+      <h3><%= @posts.count %></h3>
+      <p>Total Posts</p>
+    </div>
+    <div class="stat-card">
+      <h3><%= @posts.where(status: 'published').count %></h3>
+      <p>Published Posts</p>
+    </div>
+    <div class="stat-card">
+      <h3><%= @posts.where(status: 'draft').count %></h3>
+      <p>Draft Posts</p>
+    </div>
+    <div class="stat-card">
+      <h3><%= @posts.joins(:comments).count %></h3>
+      <p>Total Comments</p>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-md-4">
-      <div class="card">
+    <div class="col-lg-4 mb-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <h5 class="card-title mb-0">
+            <i class="fas fa-user-circle me-2"></i>Account Information
+          </h5>
+        </div>
         <div class="card-body">
-          <h5 class="card-title">User Information</h5>
-          <p class="card-text">
-            <strong>Email:</strong> <%= @user.email %><br>
-            <strong>Member since:</strong> <%= @user.created_at.strftime("%B %d, %Y") %><br>
-            <strong>Last sign in:</strong> <%= @user.respond_to?(:last_sign_in_at) && @user.last_sign_in_at ? @user.last_sign_in_at.strftime("%B %d, %Y at %I:%M %p") : "Never" %>
-          </p>
+          <div class="mb-3">
+            <label class="form-label fw-medium text-muted">Email Address</label>
+            <p class="mb-0"><%= @user.email %></p>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-medium text-muted">Member Since</label>
+            <p class="mb-0"><%= @user.created_at.strftime("%B %d, %Y") %></p>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-medium text-muted">Last Sign In</label>
+            <p class="mb-0">
+              <%= @user.respond_to?(:last_sign_in_at) && @user.last_sign_in_at ? @user.last_sign_in_at.strftime("%B %d, %Y at %I:%M %p") : "Never" %>
+            </p>
+          </div>
           
           <% if @user.admin? %>
-            <div class="mt-3">
+            <hr>
+            <div class="d-grid">
               <%= link_to admin_dashboard_path, class: "btn btn-danger" do %>
-                <i class="fas fa-tachometer-alt"></i> Admin Dashboard
+                <i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard
               <% end %>
             </div>
           <% end %>
@@ -38,28 +77,32 @@
       </div>
     </div>
     
-    <div class="col-md-8">
+    <div class="col-lg-8">
       <!-- Dashboard Filters -->
       <%= render 'shared/dashboard_filters' %>
       
       <div class="card">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="card-header">
+          <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">
-              Your Posts
+              <i class="fas fa-file-alt me-2"></i>Your Posts
               <% if @posts.any? %>
                 <span class="badge bg-secondary ms-2"><%= @posts.count %></span>
               <% end %>
             </h5>
-            <%= link_to new_post_path, class: "btn btn-primary btn-sm" do %>
-              <i class="fas fa-plus"></i> New Post
-            <% end %>
+            <div class="d-flex gap-2">
+              <%= link_to posts_path(user_filter: "own"), class: "btn btn-outline-primary btn-sm" do %>
+                <i class="fas fa-external-link-alt me-1"></i>View All
+              <% end %>
+            </div>
           </div>
-          
+        </div>
+        
+        <div class="card-body">
           <!-- Results Summary -->
           <% if @filter_params&.values&.any?(&:present?) %>
-            <div class="alert alert-info mb-3">
-              <i class="fas fa-info-circle"></i>
+            <div class="alert alert-info mb-4">
+              <i class="fas fa-info-circle me-2"></i>
               Showing <%= @posts.count %> post<%= 's' unless @posts.count == 1 %> 
               <% if @filter_params[:search].present? %>
                 matching "<%= @filter_params[:search] %>"
@@ -68,48 +111,86 @@
           <% end %>
           
           <% if @posts.any? %>
-            <div class="list-group list-group-flush">
-              <% @posts.limit(10).each do |post| %>
-                <div class="list-group-item d-flex justify-content-between align-items-center">
-                  <div class="flex-grow-1">
-                    <div class="d-flex justify-content-between align-items-start">
-                      <div>
-                        <%= link_to post.title, post_path(post), class: "text-decoration-none fw-bold" %>
-                        <br>
-                        <small class="text-muted">
-                          <i class="fas fa-clock"></i> <%= time_ago_in_words(post.created_at) %> ago
-                        </small>
-                      </div>
-                      <div class="text-end">
-                        <span class="badge <%= post.published? ? 'bg-success' : 'bg-warning' %> me-2">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Comments</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @posts.limit(10).each do |post| %>
+                    <tr>
+                      <td>
+                        <div>
+                          <%= link_to post.title, post_path(post), class: "text-decoration-none fw-medium" %>
+                          <br>
+                          <small class="text-muted">
+                            <%= truncate(post.body, length: 60) %>
+                          </small>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge <%= post.published? ? 'bg-success' : 'bg-warning' %>">
+                          <i class="fas fa-<%= post.published? ? 'check-circle' : 'clock' %> me-1"></i>
                           <%= post.status.titleize %>
                         </span>
+                      </td>
+                      <td>
                         <span class="badge bg-info">
-                          <i class="fas fa-comments"></i> <%= post.comments_count %>
+                          <i class="fas fa-comments me-1"></i>
+                          <%= post.comments_count %>
                         </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% end %>
+                      </td>
+                      <td>
+                        <small class="text-muted">
+                          <i class="fas fa-clock me-1"></i>
+                          <%= time_ago_in_words(post.created_at) %> ago
+                        </small>
+                      </td>
+                      <td>
+                        <div class="d-flex gap-2">
+                          <%= link_to post_path(post), class: "btn btn-outline-primary btn-sm" do %>
+                            <i class="fas fa-eye"></i>
+                          <% end %>
+                          <%= link_to edit_post_path(post), class: "btn btn-outline-warning btn-sm" do %>
+                            <i class="fas fa-edit"></i>
+                          <% end %>
+                        </div>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
             </div>
             
             <% if @posts.count > 10 %>
-              <div class="mt-3">
-                <%= link_to "View All Your Posts", posts_path(user_filter: "own"), class: "btn btn-outline-primary btn-sm" %>
+              <div class="text-center mt-4">
+                <%= link_to posts_path(user_filter: "own"), class: "btn btn-outline-primary" do %>
+                  <i class="fas fa-external-link-alt me-2"></i>View All Your Posts
+                <% end %>
               </div>
             <% end %>
           <% else %>
-            <div class="text-center py-4">
-              <i class="fas fa-search fa-3x text-muted mb-3"></i>
-              <h5 class="text-muted">No posts found</h5>
-              <p class="text-muted">
+            <div class="text-center py-5">
+              <div class="mb-4">
+                <i class="fas fa-file-alt fa-4x text-muted"></i>
+              </div>
+              <h5 class="text-muted mb-3">No posts found</h5>
+              <p class="text-muted mb-4">
                 <% if @filter_params&.values&.any?(&:present?) %>
                   Try adjusting your search criteria or filters.
                 <% else %>
                   You haven't created any posts yet. Start writing by creating your first post!
                 <% end %>
               </p>
+              <%= link_to new_post_path, class: "btn btn-primary" do %>
+                <i class="fas fa-plus me-2"></i>Create Your First Post
+              <% end %>
             </div>
           <% end %>
         </div>

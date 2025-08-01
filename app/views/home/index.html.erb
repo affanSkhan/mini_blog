@@ -1,73 +1,144 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8 text-center">
-      <h1 class="display-4 mb-4">
-        <i class="fas fa-blog text-primary"></i> Welcome to Mini Blog
-      </h1>
-      <p class="lead mb-4">A simple and elegant blogging platform built with Ruby on Rails</p>
-      
-      <!-- Search Bar -->
-      <div class="row mb-5">
-        <div class="col-md-8 mx-auto">
-          <div class="card shadow">
-            <div class="card-body">
-              <h5 class="card-title mb-3">
-                <i class="fas fa-search"></i> Discover Posts
-              </h5>
-              <%= form_with url: posts_path, method: :get, local: true, class: "d-flex" do |form| %>
-                <%= form.text_field :search, 
-                    class: "form-control me-2", 
-                    placeholder: "Search posts by title or content..." %>
-                <%= form.submit "Search", class: "btn btn-primary" %>
-              <% end %>
-            </div>
-          </div>
+<!-- Hero Section -->
+<section class="py-5 bg-gradient-primary text-white">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="display-4 fw-bold mb-4">
+          Share Your Story with the World
+        </h1>
+        <p class="lead mb-4">
+          A modern, fast, and beautiful blogging platform built with Ruby on Rails. 
+          Create, share, and discover amazing content.
+        </p>
+        <div class="d-flex gap-3 mb-5">
+          <% if user_signed_in? %>
+            <%= link_to new_post_path, class: "btn btn-light btn-lg" do %>
+              <i class="fas fa-plus me-2"></i>Create Post
+            <% end %>
+          <% else %>
+            <%= link_to new_user_registration_path, class: "btn btn-light btn-lg" do %>
+              <i class="fas fa-user-plus me-2"></i>Get Started
+            <% end %>
+          <% end %>
+          <%= link_to posts_path, class: "btn btn-outline-light btn-lg" do %>
+            <i class="fas fa-book-open me-2"></i>Read Posts
+          <% end %>
         </div>
       </div>
-      
-      <div class="row mt-5">
-        <div class="col-md-4">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="fas fa-user-plus text-primary"></i> Get Started
-              </h5>
-              <p class="card-text">Create an account and start sharing your thoughts with the world.</p>
-              <%= link_to new_user_registration_path, class: "btn btn-primary" do %>
-                <i class="fas fa-user-plus"></i> Sign Up
-              <% end %>
-            </div>
-          </div>
+      <div class="col-lg-6 text-center">
+        <div class="hero-illustration">
+          <i class="fas fa-blog fa-8x text-white-50"></i>
         </div>
-        
-        <div class="col-md-4">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="fas fa-sign-in-alt text-success"></i> Already have an account?
-              </h5>
-              <p class="card-text">Sign in to access your dashboard and manage your blog.</p>
-              <%= link_to new_user_session_path, class: "btn btn-outline-primary" do %>
-                <i class="fas fa-sign-in-alt"></i> Sign In
-              <% end %>
-            </div>
-          </div>
-        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class="col-md-4">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="fas fa-book-open text-info"></i> Read Posts
-              </h5>
-              <p class="card-text">Browse and read posts from our community of writers.</p>
-              <%= link_to posts_path, class: "btn btn-success" do %>
-                <i class="fas fa-book-open"></i> View Posts
-              <% end %>
-            </div>
+<!-- Search Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-lg border-0">
+          <div class="card-body p-4">
+            <h3 class="text-center mb-4">
+              <i class="fas fa-search text-primary me-2"></i>Discover Amazing Content
+            </h3>
+            <%= form_with url: posts_path, method: :get, local: true, class: "d-flex gap-3" do |form| %>
+              <div class="flex-grow-1">
+                <%= form.text_field :search, 
+                    class: "form-control form-control-lg", 
+                    placeholder: "Search posts by title or content..." %>
+              </div>
+              <%= form.submit "Search", class: "btn btn-primary btn-lg" %>
+            <% end %>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row text-center mb-5">
+      <div class="col-lg-8 mx-auto">
+        <h2 class="display-5 fw-bold mb-3">Why Choose Mini Blog?</h2>
+        <p class="lead text-muted">Built with modern technologies and designed for the best user experience.</p>
+      </div>
+    </div>
+    
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm text-center">
+          <div class="card-body p-4">
+            <div class="feature-icon mb-3">
+              <i class="fas fa-rocket fa-3x text-primary"></i>
+            </div>
+            <h4 class="card-title">Fast & Modern</h4>
+            <p class="card-text text-muted">
+              Built with Ruby on Rails 8 and modern web technologies for lightning-fast performance.
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm text-center">
+          <div class="card-body p-4">
+            <div class="feature-icon mb-3">
+              <i class="fas fa-mobile-alt fa-3x text-success"></i>
+            </div>
+            <h4 class="card-title">Mobile First</h4>
+            <p class="card-text text-muted">
+              Fully responsive design that looks great on all devices, from phones to desktops.
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm text-center">
+          <div class="card-body p-4">
+            <div class="feature-icon mb-3">
+              <i class="fas fa-shield-alt fa-3x text-warning"></i>
+            </div>
+            <h4 class="card-title">Secure & Reliable</h4>
+            <p class="card-text text-muted">
+              Enterprise-grade security with Devise authentication and PostgreSQL database.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h2 class="display-6 fw-bold mb-4">Ready to Start Writing?</h2>
+        <p class="lead text-muted mb-4">
+          Join our community of writers and share your thoughts with the world.
+        </p>
+        <div class="d-flex gap-3 justify-content-center">
+          <% if user_signed_in? %>
+            <%= link_to dashboard_path, class: "btn btn-primary btn-lg" do %>
+              <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+            <% end %>
+          <% else %>
+            <%= link_to new_user_registration_path, class: "btn btn-primary btn-lg" do %>
+              <i class="fas fa-user-plus me-2"></i>Create Account
+            <% end %>
+            <%= link_to new_user_session_path, class: "btn btn-outline-primary btn-lg" do %>
+              <i class="fas fa-sign-in-alt me-2"></i>Sign In
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
