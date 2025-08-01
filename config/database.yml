@@ -20,3 +20,8 @@ test:
 production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
+
+# Tell SolidCable / ActionCable to use the same production DB:
+cable:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
