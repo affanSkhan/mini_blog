@@ -7,5 +7,6 @@ user = User.create!(
   admin: true
 )
 
-puts "✅ Admin created: #{user.email}"
-puts "✅ Admin status: #{user.admin?}"
+puts "Admin created: #{user.email}"
+puts "Admin status: #{user.admin?}"
+#again
