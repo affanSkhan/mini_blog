@@ -58,7 +58,7 @@ gem "devise"
 gem "psych", "~> 4.0"
 
 # Friendly URLs for Rails [https://github.com/norman/friendly_id]
-gem "friendly_id", "~> 5.4.0"
+gem "friendly_id", "~> 5.5.1"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
