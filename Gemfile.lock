@@ -264,7 +264,8 @@ GEM
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
       rack
-    psych (4.0.6)
+    psych (5.2.6)
+      date
       stringio
     public_suffix (6.0.2)
     puma (6.6.0)
@@ -455,7 +456,7 @@ DEPENDENCIES
   meta-tags (~> 2.18)
   pg (~> 1.1)
   propshaft
-  psych (~> 4.0)
+  psych (~> 5.2)
   puma (>= 5.0)
   pundit (~> 2.3)
   rails (~> 8.0.2)

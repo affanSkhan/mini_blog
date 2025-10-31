@@ -55,7 +55,7 @@ gem "jbuilder"
 gem "devise"
 
 # Use a compatible version of psych for Windows
-gem "psych", "~> 4.0"
+gem "psych", "~> 5.2"
 
 # Friendly URLs for Rails [https://github.com/norman/friendly_id]
 gem "friendly_id", "~> 5.4.0"
